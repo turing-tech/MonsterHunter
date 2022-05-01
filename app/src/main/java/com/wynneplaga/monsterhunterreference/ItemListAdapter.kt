@@ -7,27 +7,18 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.turingtechnologies.materialscrollbar.INameableAdapter
 import com.wynneplaga.monsterhunterreference.databinding.LayoutDecorationBinding
 import com.wynneplaga.monsterhunterreference.databinding.LayoutItemBinding
 
-class ItemListAdapter: RecyclerView.Adapter<ItemListAdapter.ItemListHolder>(), INameableAdapter {
+class ItemListAdapter: ListAdapter<ItemModel, ItemListAdapter.ItemListHolder>(DiffCallback), INameableAdapter {
 
-    private val diffCallback = object: DiffUtil.ItemCallback<ItemModel>() {
+    private object DiffCallback: DiffUtil.ItemCallback<ItemModel>() {
         override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel) = oldItem == newItem
         override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel) = oldItem == newItem
     }
-
-    /**
-     * Used to quickly update the contents automatically and efficiently
-     */
-    private val differUtils: AsyncListDiffer<ItemModel> = AsyncListDiffer(this, diffCallback)
-
-    /**
-     * Propose list to the adapter, which will update its contents accordingly
-     */
-    fun submitList(itemList: List<ItemModel>) = differUtils.submitList(itemList)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemListHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item, parent, false)
@@ -35,7 +26,7 @@ class ItemListAdapter: RecyclerView.Adapter<ItemListAdapter.ItemListHolder>(), I
     }
 
     override fun onBindViewHolder(holder: ItemListHolder, position: Int) {
-        val item = differUtils.currentList[position]
+        val item = currentList[position]
         holder.binding.apply {
             itemName.text = item.name
             itemRank.text = item.rank.name.replaceFirstChar { it.uppercaseChar() }
@@ -55,8 +46,6 @@ class ItemListAdapter: RecyclerView.Adapter<ItemListAdapter.ItemListHolder>(), I
         }
     }
 
-    override fun getItemCount() = differUtils.currentList.size
-
     class ItemListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val binding = LayoutItemBinding.bind(itemView)
@@ -64,6 +53,6 @@ class ItemListAdapter: RecyclerView.Adapter<ItemListAdapter.ItemListHolder>(), I
     }
 
     // INameableAdapter
-    override fun getCharacterForElement(element: Int) = differUtils.currentList[element].name[0]
+    override fun getCharacterForElement(element: Int) = currentList[element].name[0]
 
 }

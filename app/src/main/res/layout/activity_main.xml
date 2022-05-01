@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/toolbarLayout"
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.wynneplaga.monsterhunterreference.MainActivityViewModel" />
+    </data>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".MainActivity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="@string/app_name"
-        app:menu="@menu/main_menu"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/toolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/app_name"
+                app:menu="@menu/main_menu"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeToRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbarLayout"
-        android:background="#F3F3F3">
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainContentRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefreshLayout"
+            app:refreshing="@{viewModel.isRefreshing()}"
+            app:onRefreshListener="@{() -> viewModel.refreshItemsList()}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingEnd="16dp" />
+            android:layout_below="@id/toolbarLayout"
+            android:background="#F3F3F3">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                app:hasFixedSize="@{true}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:id="@+id/mainContentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingEnd="16dp" />
 
-    <com.turingtechnologies.materialscrollbar.DragScrollBar
-        android:id="@+id/scrollBar"
-        app:msb_recyclerView="@id/mainContentRecyclerView"
-        app:msb_lightOnTouch="false"
-        android:layout_below="@id/toolbarLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
+        <com.turingtechnologies.materialscrollbar.DragScrollBar
+            android:id="@+id/scrollBar"
+            app:msb_recyclerView="@id/mainContentRecyclerView"
+            app:msb_lightOnTouch="false"
+            android:layout_below="@id/toolbarLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+</layout>
 
