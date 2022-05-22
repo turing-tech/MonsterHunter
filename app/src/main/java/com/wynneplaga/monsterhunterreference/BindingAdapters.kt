@@ -5,10 +5,18 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("items")
+    fun <T> setRecyclerViewItems(view: RecyclerView, items: List<T>) {
+        (view.adapter as ListAdapter<T, *>).submitList(items)
+    }
 
     @JvmStatic
     @BindingAdapter(value = ["picassoSrc", "picassoPlaceholder"], requireAll = false)

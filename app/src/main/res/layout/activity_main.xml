@@ -39,6 +39,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 app:hasFixedSize="@{true}"
+                app:items="@{viewModel.filteredItems}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:id="@+id/mainContentRecyclerView"
                 android:layout_width="match_parent"

@@ -5,10 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.wynneplaga.monsterhunterreference.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,17 +31,14 @@ class MainActivity : AppCompatActivity() {
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?) = true
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    activityViewModel.searchTerm.value = newText ?: ""
+                override fun onQueryTextChange(newText: String): Boolean {
+                    activityViewModel.searchTerm.value = newText
                     return true
                 }
             })
 
             // Start loading the items list from the server
             activityViewModel.refreshItemsList()
-            lifecycleScope.launch {
-                activityViewModel.filteredItems.flowWithLifecycle(lifecycle).collect(adapter::submitList)
-            }
         }
     }
 
