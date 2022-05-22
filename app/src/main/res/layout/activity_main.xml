@@ -30,7 +30,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefreshLayout"
-            app:refreshing="@{viewModel.isRefreshing()}"
+            app:refreshing="@{viewModel.isRefreshing}"
             app:onRefreshListener="@{() -> viewModel.refreshItemsList()}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,10 +47,11 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <com.turingtechnologies.materialscrollbar.DragScrollBar
+        <com.wynneplaga.materialScrollBar2.MaterialScrollBar
             android:id="@+id/scrollBar"
+            app:msb_indicatorType="alphabetic"
+            app:msb_handleColor="@color/teal_700"
             app:msb_recyclerView="@id/mainContentRecyclerView"
-            app:msb_lightOnTouch="false"
             android:layout_below="@id/toolbarLayout"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"

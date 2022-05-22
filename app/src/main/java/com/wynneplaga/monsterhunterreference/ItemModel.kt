@@ -1,14 +1,20 @@
 package com.wynneplaga.monsterhunterreference
 
+import android.os.Build
 import android.os.Parcelable
+import android.text.Html
 import androidx.annotation.DrawableRes
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 enum class RANK {
     low,
     medium,
     high,
-    master
+    master;
+
+    val formattedName: String = name.replaceFirstChar { it.uppercaseChar() }
+
 }
 
 enum class TYPE(@DrawableRes val image: Int) {
@@ -16,7 +22,10 @@ enum class TYPE(@DrawableRes val image: Int) {
     chest(R.drawable.ic_chest),
     gloves(R.drawable.ic_gloves),
     waist(R.drawable.ic_waist),
-    legs(R.drawable.ic_legs)
+    legs(R.drawable.ic_legs);
+
+    val formattedName: String = name.replaceFirstChar { it.uppercaseChar() }
+
 }
 
 @Parcelize
@@ -44,6 +53,7 @@ data class Resistances(val fire: Int, val water: Int, val ice: Int, val thunder:
 
     companion object {
 
+        @JvmStatic
         fun formatResistanceAsString(value: Int): String {
             return if (value > 0)
                 "+$value"
@@ -75,6 +85,26 @@ data class ItemModel(
     // Use the id to get a consistent but even gender split in the image we use
     val assetImage: String?
         get() = if (id % 2 == 0) (assets?.imageFemale ?: assets?.imageMale) else (assets?.imageMale ?: assets?.imageFemale)
+
+    @IgnoredOnParcel
+    val skillsText: CharSequence by lazy<CharSequence> {
+        val skillText = skills.joinToString(separator = "<br/>") { skill -> "<b>${skill.skillName}</b>(${skill.level})- ${skill.description}" }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(skillText, 0, null, null)
+        } else {
+            Html.fromHtml(skillText)
+        }
+    }
+
+    @IgnoredOnParcel
+    val craftingText: CharSequence by lazy<CharSequence> {
+        val craftingText = crafting.materials.map { Pair(it.quantity, it.item) }.joinToString(separator = "<br/>") { item -> "<b>${item.second.name}</b> x${item.first}- ${item.second.description}" }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(craftingText, 0, null, null)
+        } else {
+            Html.fromHtml(craftingText)
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         return if (other is ItemModel) {

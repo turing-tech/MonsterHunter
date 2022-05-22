@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.turingtechnologies.materialscrollbar.AlphabetIndicator
 import com.wynneplaga.monsterhunterreference.databinding.ActivityMainBinding
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -41,9 +39,6 @@ class MainActivity : AppCompatActivity() {
                     return true
                 }
             })
-
-            // My own library, which is available open source (note that it is a bit old though)
-            scrollBar.setIndicator(AlphabetIndicator(this@MainActivity), true)
 
             // Start loading the items list from the server
             activityViewModel.refreshItemsList()
